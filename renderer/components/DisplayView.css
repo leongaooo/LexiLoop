@@ -1,0 +1,74 @@
+.display-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    height: calc(100vh - 40px);
+    /* 减去标题栏高度 */
+}
+
+.display-view.empty {
+    justify-content: center;
+}
+
+.empty-message {
+    text-align: center;
+    color: #999;
+}
+
+.empty-message p {
+    margin: 8px 0;
+    font-size: 18px;
+}
+
+.empty-message .hint {
+    font-size: 14px;
+    color: #bbb;
+}
+
+.corpus-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.corpus-text {
+    text-align: center;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 90%;
+    user-select: text;
+    animation: fadeInUp 0.5s ease-out;
+    will-change: opacity, transform;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.progress-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: #999;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+}

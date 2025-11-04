@@ -1,0 +1,143 @@
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+export interface CorpusItem {
+    id: string
+    text: string
+}
+
+export interface AppSettings {
+    fontSize: number
+    fontColor: string
+    backgroundColor: string
+    lineHeight: number
+    interval: number // 秒
+}
+
+interface AppState {
+    // 语料数据
+    corpusList: CorpusItem[]
+    currentIndex: number
+
+    // 设置
+    settings: AppSettings
+
+    // UI 状态
+    isPlaying: boolean
+    showSettings: boolean
+    showAddModal: boolean
+
+    // Actions
+    setCurrentIndex: (index: number) => void
+    addCorpus: (texts: string[]) => void
+    deleteCorpus: (id: string) => void
+    updateCorpus: (id: string, text: string) => void
+    updateSettings: (settings: Partial<AppSettings>) => void
+    togglePlay: () => void
+    setShowSettings: (show: boolean) => void
+    setShowAddModal: (show: boolean) => void
+    nextCorpus: () => void
+    prevCorpus: () => void
+}
+
+const defaultSettings: AppSettings = {
+    fontSize: 48,
+    fontColor: '#333333',
+    backgroundColor: '#ffffff',
+    lineHeight: 1.6,
+    interval: 3,
+}
+
+export const useAppStore = create<AppState>()(
+    persist(
+        (set, get) => ({
+            corpusList: [],
+            currentIndex: 0,
+            settings: defaultSettings,
+            isPlaying: true, // 默认启动
+            showSettings: false,
+            showAddModal: false,
+
+            setCurrentIndex: (index) => {
+                const { corpusList } = get()
+                if (index >= 0 && index < corpusList.length) {
+                    set({ currentIndex: index })
+                }
+            },
+
+            addCorpus: (texts) => {
+                const newItems: CorpusItem[] = texts
+                    .map((text) => text.trim())
+                    .filter((text) => text.length > 0)
+                    .map((text) => ({
+                        id: Date.now().toString() + Math.random().toString(36).substring(2, 11),
+                        text,
+                    }))
+
+                set((state) => ({
+                    corpusList: [...state.corpusList, ...newItems],
+                }))
+            },
+
+            deleteCorpus: (id) => {
+                set((state) => {
+                    const newList = state.corpusList.filter((item) => item.id !== id)
+                    const newIndex = Math.min(state.currentIndex, newList.length - 1)
+                    return {
+                        corpusList: newList,
+                        currentIndex: Math.max(0, newIndex),
+                    }
+                })
+            },
+
+            updateCorpus: (id, text) => {
+                set((state) => ({
+                    corpusList: state.corpusList.map((item) =>
+                        item.id === id ? { ...item, text } : item
+                    ),
+                }))
+            },
+
+            updateSettings: (newSettings) => {
+                set((state) => ({
+                    settings: { ...state.settings, ...newSettings },
+                }))
+            },
+
+            togglePlay: () => {
+                set((state) => ({ isPlaying: !state.isPlaying }))
+            },
+
+            setShowSettings: (show) => {
+                set({ showSettings: show })
+            },
+
+            setShowAddModal: (show) => {
+                set({ showAddModal: show })
+            },
+
+            nextCorpus: () => {
+                const { corpusList, currentIndex } = get()
+                if (corpusList.length === 0) return
+                const nextIndex = (currentIndex + 1) % corpusList.length
+                set({ currentIndex: nextIndex })
+            },
+
+            prevCorpus: () => {
+                const { corpusList, currentIndex } = get()
+                if (corpusList.length === 0) return
+                const prevIndex = currentIndex === 0 ? corpusList.length - 1 : currentIndex - 1
+                set({ currentIndex: prevIndex })
+            },
+        }),
+        {
+            name: 'lexiloop-storage',
+            partialize: (state) => ({
+                corpusList: state.corpusList,
+                currentIndex: state.currentIndex,
+                settings: state.settings,
+                // 不保存播放状态，总是默认启动
+            }),
+        }
+    )
+)

@@ -1,0 +1,174 @@
+.settings-view {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #fafafa;
+    height: calc(100vh - 40px);
+    /* 减去标题栏高度 */
+}
+
+.settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.settings-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.close-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.close-btn:hover {
+    background: #f0f0f0;
+}
+
+.settings-section {
+    padding: 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.settings-section:last-child {
+    border-bottom: none;
+}
+
+.settings-section h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.setting-item label {
+    font-size: 14px;
+    color: #666;
+    min-width: 120px;
+}
+
+.setting-item input[type="number"],
+.setting-item input[type="color"] {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.setting-item input[type="number"] {
+    width: 100px;
+}
+
+.setting-item input[type="color"] {
+    width: 60px;
+    height: 36px;
+    cursor: pointer;
+}
+
+.corpus-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.corpus-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+}
+
+.corpus-item:hover {
+    background: #f5f5f5;
+}
+
+.corpus-text {
+    flex: 1;
+    margin-right: 12px;
+    word-break: break-word;
+    font-size: 14px;
+    color: #333;
+}
+
+.corpus-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.corpus-actions button {
+    padding: 4px 12px;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.corpus-actions button:hover {
+    background: #f0f0f0;
+    border-color: #bbb;
+}
+
+.edit-mode {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    align-items: center;
+}
+
+.edit-mode input {
+    flex: 1;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.edit-mode button {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-mode button:hover {
+    background: #f0f0f0;
+}
+
+.empty-hint {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+    font-size: 14px;
+}
