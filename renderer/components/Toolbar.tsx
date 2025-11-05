@@ -17,7 +17,8 @@ export default function Toolbar({ windowHeight, showProgress, progressText }: To
     setFishMode,
     fishMode,
     theme,
-    toggleTheme
+    toggleTheme,
+    settings
   } = useAppStore()
   const [isMaximized, setIsMaximized] = useState(false)
   const [isAlwaysOnTop, setIsAlwaysOnTop] = useState(false)
@@ -48,7 +49,11 @@ export default function Toolbar({ windowHeight, showProgress, progressText }: To
     // 设置窗口大小为默认摸鱼模式尺寸
     if (window.electronAPI && 'setSize' in window.electronAPI) {
       (window.electronAPI as any).setSize(500, 50)
+      // 等待窗口大小设置完成后再居中
+      await new Promise(resolve => setTimeout(resolve, 50))
     }
+    // 将窗口居中到屏幕
+    window.electronAPI?.center()
     // 摸鱼模式时默认开启窗口置顶
     if (!isAlwaysOnTop) {
       setIsAlwaysOnTop(true)
@@ -83,7 +88,10 @@ export default function Toolbar({ windowHeight, showProgress, progressText }: To
   }
 
   return (
-    <div className={`title-bar ${theme === 'dark' ? 'dark' : ''}`}>
+    <div
+      className={`title-bar ${theme === 'dark' ? 'dark' : ''} ${settings.transparent ? 'transparent' : ''}`}
+      style={settings.transparent ? { background: 'transparent', borderBottom: 'none' } : {}}
+    >
       <div className="title-bar-left">
         <div className="title-bar-title">LexiLoop</div>
         <div className="title-bar-buttons">

@@ -115,6 +115,14 @@ export default function SettingsView() {
             </select>
           </div>
           <div className="setting-item">
+            <label>背景和边框透明</label>
+            <input
+              type="checkbox"
+              checked={settings.transparent}
+              onChange={(e) => updateSettings({ transparent: e.target.checked })}
+            />
+          </div>
+          <div className="setting-item">
             <label>轮播间隔 (秒)</label>
             <input
               type="number"

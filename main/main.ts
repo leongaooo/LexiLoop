@@ -12,6 +12,7 @@ function createWindow() {
         minWidth: 200,
         minHeight: 40, // 只保留标题栏高度，允许尽可能小
         frame: false, // 无边框窗口，使用自定义标题栏
+        transparent: true, // 支持透明背景
         webPreferences: {
             preload: join(__dirname, './preload.js'),
             nodeIntegration: false,
@@ -61,6 +62,19 @@ function createWindow() {
             return { width: size[0], height: size[1] }
         }
         return { width: 1000, height: 600 }
+    })
+
+    ipcMain.handle('window-center', () => {
+        if (mainWindow) {
+            mainWindow.center()
+        }
+    })
+
+    ipcMain.handle('window-set-transparent', (_event, transparent: boolean) => {
+        if (mainWindow) {
+            mainWindow.setBackgroundColor(transparent ? '#00000000' : '#ffffff')
+            mainWindow.setOpacity(transparent ? 0.95 : 1.0)
+        }
     })
 
     // 监听窗口大小变化

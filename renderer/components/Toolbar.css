@@ -10,11 +10,20 @@
     user-select: none;
     z-index: 1000;
     transition: background 0.3s, border-color 0.3s;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .app.dark .title-bar {
     background: #2d2d2d;
     border-bottom-color: #404040;
+}
+
+.title-bar.transparent {
+    background: transparent !important;
+    border-bottom: none !important;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .app.dark .title-bar-title {

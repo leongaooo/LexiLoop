@@ -107,22 +107,35 @@ function App() {
 
   const themeColors = getThemeColors()
 
+  // 应用透明设置
+  useEffect(() => {
+    window.electronAPI?.setTransparent(settings.transparent)
+  }, [settings.transparent])
+
   // 摸鱼模式
   if (fishMode) {
+    const bgColor = settings.transparent
+      ? 'transparent'
+      : (theme === 'dark' ? themeColors.bg : settings.backgroundColor)
+
     return (
       <div
         className={`app ${theme} fish-mode`}
-        style={{ backgroundColor: theme === 'dark' ? themeColors.bg : settings.backgroundColor, margin: 0, padding: 0 }}
+        style={{ backgroundColor: bgColor, margin: 0, padding: 0 }}
       >
         <FishModeView />
       </div>
     )
   }
 
+  const bgColor = settings.transparent
+    ? 'transparent'
+    : (showSettings ? themeColors.bg : (theme === 'dark' ? themeColors.bg : settings.backgroundColor))
+
   return (
     <div
       className={`app ${theme}`}
-      style={{ backgroundColor: showSettings ? themeColors.bg : (theme === 'dark' ? themeColors.bg : settings.backgroundColor) }}
+      style={{ backgroundColor: bgColor }}
     >
       <Toolbar
         windowHeight={windowHeight}

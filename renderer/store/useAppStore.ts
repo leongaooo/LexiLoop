@@ -13,6 +13,7 @@ export interface AppSettings {
     lineHeight: number
     interval: number // 秒
     fontWeight: 'normal' | 'bold' // 字体加粗
+    transparent: boolean // 背景和边框透明
 }
 
 interface AppState {
@@ -53,6 +54,7 @@ const defaultSettings: AppSettings = {
     lineHeight: 1.6,
     interval: 3,
     fontWeight: 'bold', // 默认加粗
+    transparent: false, // 默认不透明
 }
 
 export const useAppStore = create<AppState>()(
