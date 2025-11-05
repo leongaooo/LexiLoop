@@ -4,6 +4,7 @@ import { join } from 'path'
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 
 let mainWindow: BrowserWindow | null = null
+let isTopMost = false
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -47,12 +48,22 @@ function createWindow() {
     ipcMain.handle('window-set-size', (_event, width: number, height: number) => {
         if (mainWindow) {
             mainWindow.setSize(width, height)
+            // 维护置顶状态
+            if (isTopMost) {
+                mainWindow.setAlwaysOnTop(true, 'screen-saver')
+            }
         }
     })
 
     ipcMain.handle('window-set-always-on-top', (_event, flag: boolean) => {
         if (mainWindow) {
-            mainWindow.setAlwaysOnTop(flag)
+            isTopMost = flag
+            // 使用更高优先级的 level，提升在 Windows 上的置顶稳定性
+            mainWindow.setAlwaysOnTop(flag, flag ? 'screen-saver' : 'normal')
+            if (flag) {
+                mainWindow.show()
+                mainWindow.focus()
+            }
         }
     })
 
@@ -67,6 +78,11 @@ function createWindow() {
     ipcMain.handle('window-center', () => {
         if (mainWindow) {
             mainWindow.center()
+            if (isTopMost) {
+                mainWindow.setAlwaysOnTop(true, 'screen-saver')
+                mainWindow.show()
+                mainWindow.focus()
+            }
         }
     })
 
@@ -82,6 +98,9 @@ function createWindow() {
         if (mainWindow) {
             const size = mainWindow.getSize()
             mainWindow.webContents.send('window-resize', { width: size[0], height: size[1] })
+            if (isTopMost) {
+                mainWindow.setAlwaysOnTop(true, 'screen-saver')
+            }
         }
     })
 

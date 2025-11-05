@@ -46,19 +46,21 @@ export default function Toolbar({ windowHeight, showProgress, progressText }: To
     }
 
     setFishMode(true)
+    // 先设置窗口置顶（摸鱼模式时默认开启窗口置顶）
+    setIsAlwaysOnTop(true)
+    await window.electronAPI?.setAlwaysOnTop(true)
+
     // 设置窗口大小为默认摸鱼模式尺寸
     if (window.electronAPI && 'setSize' in window.electronAPI) {
       (window.electronAPI as any).setSize(500, 50)
       // 等待窗口大小设置完成后再居中
-      await new Promise(resolve => setTimeout(resolve, 50))
+      await new Promise(resolve => setTimeout(resolve, 100))
     }
     // 将窗口居中到屏幕
     window.electronAPI?.center()
-    // 摸鱼模式时默认开启窗口置顶
-    if (!isAlwaysOnTop) {
-      setIsAlwaysOnTop(true)
-      window.electronAPI?.setAlwaysOnTop(true)
-    }
+    // 确保置顶状态保持（居中操作后再次确认）
+    await new Promise(resolve => setTimeout(resolve, 50))
+    window.electronAPI?.setAlwaysOnTop(true)
   }
 
   const handleSetAlwaysOnTop = () => {

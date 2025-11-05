@@ -5,7 +5,7 @@
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && electron-builder --config.win.sign=null",
+    "build": "rmdir /s /q release 2>nul & vite build && electron-builder --config.win.sign=null",
     "build:no-sign": "vite build && set CSC_IDENTITY_AUTO_DISCOVERY=false&& electron-builder",
     "preview": "vite preview"
   },
