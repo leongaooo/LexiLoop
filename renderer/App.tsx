@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppStore } from './store/useAppStore'
 import DisplayView from './components/DisplayView'
 import SettingsView from './components/SettingsView'
 import AddCorpusModal from './components/AddCorpusModal'
 import Toolbar from './components/Toolbar'
+import FishModeView from './components/FishModeView'
 import './styles/app.css'
 
 function App() {
@@ -15,10 +16,27 @@ function App() {
     prevCorpus,
     togglePlay,
     setShowSettings,
-    settings
+    settings,
+    fishMode,
+    theme
   } = useAppStore()
 
-  // 自动轮播逻辑
+  const [windowHeight, setWindowHeight] = useState<number>(600)
+  const [progressText, setProgressText] = useState<string>('')
+
+  // 获取窗口初始大小
+  useEffect(() => {
+    window.electronAPI?.getSize().then((size) => {
+      setWindowHeight(size.height)
+    })
+
+    // 监听窗口大小变化
+    window.electronAPI?.onResize((size) => {
+      setWindowHeight(size.height)
+    })
+  }, [])
+
+  // 自动轮播逻辑（摸鱼模式和普通模式都支持）
   useEffect(() => {
     if (!isPlaying || showSettings || showAddModal) return
 
@@ -40,7 +58,7 @@ function App() {
       switch (e.key) {
         case ' ':
           e.preventDefault()
-          if (!showSettings && !showAddModal) {
+          if (!showSettings && !showAddModal && !fishMode) {
             togglePlay()
           }
           break
@@ -66,18 +84,58 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [showSettings, showAddModal, togglePlay, nextCorpus, prevCorpus, setShowSettings])
+  }, [showSettings, showAddModal, fishMode, togglePlay, nextCorpus, prevCorpus, setShowSettings])
+
+  // 根据主题获取颜色
+  const getThemeColors = () => {
+    if (theme === 'dark') {
+      return {
+        bg: '#1a1a1a',
+        text: '#ffffff',
+        titleBar: '#2d2d2d',
+        border: '#404040'
+      }
+    } else {
+      return {
+        bg: '#ffffff',
+        text: '#333333',
+        titleBar: '#f5f5f5',
+        border: '#e0e0e0'
+      }
+    }
+  }
+
+  const themeColors = getThemeColors()
+
+  // 摸鱼模式
+  if (fishMode) {
+    return (
+      <div
+        className={`app ${theme} fish-mode`}
+        style={{ backgroundColor: theme === 'dark' ? themeColors.bg : settings.backgroundColor, margin: 0, padding: 0 }}
+      >
+        <FishModeView />
+      </div>
+    )
+  }
 
   return (
     <div
-      className="app"
-      style={{ backgroundColor: showSettings ? '#fafafa' : settings.backgroundColor }}
+      className={`app ${theme}`}
+      style={{ backgroundColor: showSettings ? themeColors.bg : (theme === 'dark' ? themeColors.bg : settings.backgroundColor) }}
     >
-      <Toolbar />
+      <Toolbar
+        windowHeight={windowHeight}
+        showProgress={true}
+        progressText={progressText}
+      />
       {showSettings ? (
         <SettingsView />
       ) : (
-        <DisplayView />
+        <DisplayView
+          windowHeight={windowHeight}
+          onProgressReady={setProgressText}
+        />
       )}
       {showAddModal && <AddCorpusModal />}
     </div>

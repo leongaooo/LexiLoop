@@ -4,7 +4,11 @@ export interface ElectronAPI {
     maximize: () => Promise<void>
     close: () => Promise<void>
     isMaximized: () => Promise<boolean>
+    setSize: (width: number, height: number) => Promise<void>
+    setAlwaysOnTop: (flag: boolean) => Promise<void>
+    getSize: () => Promise<{ width: number; height: number }>
     onMaximize: (callback: (isMaximized: boolean) => void) => void
+    onResize: (callback: (size: { width: number; height: number }) => void) => void
 }
 
 declare global {

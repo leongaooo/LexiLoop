@@ -43,6 +43,34 @@ function createWindow() {
         return mainWindow?.isMaximized() ?? false
     })
 
+    ipcMain.handle('window-set-size', (_event, width: number, height: number) => {
+        if (mainWindow) {
+            mainWindow.setSize(width, height)
+        }
+    })
+
+    ipcMain.handle('window-set-always-on-top', (_event, flag: boolean) => {
+        if (mainWindow) {
+            mainWindow.setAlwaysOnTop(flag)
+        }
+    })
+
+    ipcMain.handle('window-get-size', () => {
+        if (mainWindow) {
+            const size = mainWindow.getSize()
+            return { width: size[0], height: size[1] }
+        }
+        return { width: 1000, height: 600 }
+    })
+
+    // 监听窗口大小变化
+    mainWindow.on('resize', () => {
+        if (mainWindow) {
+            const size = mainWindow.getSize()
+            mainWindow.webContents.send('window-resize', { width: size[0], height: size[1] })
+        }
+    })
+
     // 监听窗口最大化状态变化
     mainWindow.on('maximize', () => {
         mainWindow?.webContents.send('window-maximize-changed', true)

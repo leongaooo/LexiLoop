@@ -9,6 +9,16 @@
     /* 允许拖拽窗口 */
     user-select: none;
     z-index: 1000;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.app.dark .title-bar {
+    background: #2d2d2d;
+    border-bottom-color: #404040;
+}
+
+.app.dark .title-bar-title {
+    color: #ffffff;
 }
 
 .title-bar-left {
@@ -55,6 +65,38 @@
     background: rgba(0, 0, 0, 0.15);
 }
 
+.title-bar-btn.active {
+    background: rgba(0, 123, 255, 0.2);
+}
+
+.title-bar-progress {
+    font-size: 12px;
+    color: #666;
+    margin-left: 4px;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.title-bar-progress.compact {
+    padding: 0;
+    margin-left: 8px;
+    background: transparent;
+    border-radius: 0;
+    color: inherit;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.app.dark .title-bar-progress.compact {
+    color: #ffffff;
+}
+
 .title-bar-right {
     display: flex;
     align-items: center;
@@ -73,6 +115,10 @@
     font-size: 16px;
     transition: background 0.2s;
     color: #333;
+}
+
+.app.dark .title-bar-control {
+    color: #ffffff;
 }
 
 .title-bar-control:hover {

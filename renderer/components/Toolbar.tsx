@@ -2,21 +2,25 @@ import { useEffect, useState } from 'react'
 import { useAppStore } from '../store/useAppStore'
 import './Toolbar.css'
 
-declare global {
-  interface Window {
-    electronAPI?: {
-      minimize: () => Promise<void>
-      maximize: () => Promise<void>
-      close: () => Promise<void>
-      isMaximized: () => Promise<boolean>
-      onMaximize: (callback: (isMaximized: boolean) => void) => void
-    }
-  }
+interface ToolbarProps {
+  windowHeight?: number
+  showProgress?: boolean
+  progressText?: string
 }
 
-export default function Toolbar() {
-  const { setShowSettings, setShowAddModal, togglePlay, isPlaying } = useAppStore()
+export default function Toolbar({ windowHeight, showProgress, progressText }: ToolbarProps) {
+  const {
+    setShowSettings,
+    setShowAddModal,
+    togglePlay,
+    isPlaying,
+    setFishMode,
+    fishMode,
+    theme,
+    toggleTheme
+  } = useAppStore()
   const [isMaximized, setIsMaximized] = useState(false)
+  const [isAlwaysOnTop, setIsAlwaysOnTop] = useState(false)
 
   useEffect(() => {
     // 检查初始最大化状态
@@ -25,6 +29,46 @@ export default function Toolbar() {
     // 监听最大化状态变化
     window.electronAPI?.onMaximize(setIsMaximized)
   }, [])
+
+  const handleFishMode = async () => {
+    // 如果窗口是全屏/最大化状态，先退出全屏
+    const isMax = await window.electronAPI?.isMaximized()
+    if (isMax) {
+      window.electronAPI?.maximize() // 切换最大化状态（退出全屏）
+      // 等待窗口状态更新
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
+
+    // 确保播放状态是开启的
+    if (!isPlaying) {
+      togglePlay()
+    }
+
+    setFishMode(true)
+    // 设置窗口大小为默认摸鱼模式尺寸
+    if (window.electronAPI && 'setSize' in window.electronAPI) {
+      (window.electronAPI as any).setSize(500, 50)
+    }
+    // 摸鱼模式时默认开启窗口置顶
+    if (!isAlwaysOnTop) {
+      setIsAlwaysOnTop(true)
+      window.electronAPI?.setAlwaysOnTop(true)
+    }
+  }
+
+  const handleSetAlwaysOnTop = () => {
+    const newValue = !isAlwaysOnTop
+    setIsAlwaysOnTop(newValue)
+    window.electronAPI?.setAlwaysOnTop(newValue)
+  }
+
+  // 如果高度小于200且有进度文本，显示进度
+  const shouldShowProgress = showProgress && progressText && windowHeight !== undefined && windowHeight < 200
+
+  // 摸鱼模式下不显示工具栏
+  if (fishMode) {
+    return null
+  }
 
   const handleMinimize = () => {
     window.electronAPI?.minimize()
@@ -39,7 +83,7 @@ export default function Toolbar() {
   }
 
   return (
-    <div className="title-bar">
+    <div className={`title-bar ${theme === 'dark' ? 'dark' : ''}`}>
       <div className="title-bar-left">
         <div className="title-bar-title">LexiLoop</div>
         <div className="title-bar-buttons">
@@ -56,6 +100,32 @@ export default function Toolbar() {
           <button className="title-bar-btn" onClick={() => setShowAddModal(true)} title="添加语料">
             ➕
           </button>
+          <button
+            className="title-bar-btn"
+            onClick={handleFishMode}
+            title="摸鱼模式"
+          >
+            🐟
+          </button>
+          <button
+            className={`title-bar-btn ${isAlwaysOnTop ? 'active' : ''}`}
+            onClick={handleSetAlwaysOnTop}
+            title={isAlwaysOnTop ? "取消置顶" : "置顶窗口"}
+          >
+            📌
+          </button>
+          <button
+            className="title-bar-btn"
+            onClick={toggleTheme}
+            title={theme === 'light' ? "切换到深色主题" : "切换到浅色主题"}
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+          {shouldShowProgress && (
+            <span className={`title-bar-progress ${windowHeight !== undefined && windowHeight < 200 ? 'compact' : ''}`}>
+              {progressText}
+            </span>
+          )}
         </div>
       </div>
       <div className="title-bar-right">

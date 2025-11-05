@@ -12,6 +12,7 @@ export interface AppSettings {
     backgroundColor: string
     lineHeight: number
     interval: number // 秒
+    fontWeight: 'normal' | 'bold' // 字体加粗
 }
 
 interface AppState {
@@ -26,6 +27,8 @@ interface AppState {
     isPlaying: boolean
     showSettings: boolean
     showAddModal: boolean
+    fishMode: boolean // 摸鱼模式
+    theme: 'light' | 'dark' // 主题
 
     // Actions
     setCurrentIndex: (index: number) => void
@@ -36,6 +39,9 @@ interface AppState {
     togglePlay: () => void
     setShowSettings: (show: boolean) => void
     setShowAddModal: (show: boolean) => void
+    setFishMode: (fishMode: boolean) => void
+    setTheme: (theme: 'light' | 'dark') => void
+    toggleTheme: () => void
     nextCorpus: () => void
     prevCorpus: () => void
 }
@@ -46,6 +52,7 @@ const defaultSettings: AppSettings = {
     backgroundColor: '#ffffff',
     lineHeight: 1.6,
     interval: 3,
+    fontWeight: 'bold', // 默认加粗
 }
 
 export const useAppStore = create<AppState>()(
@@ -57,6 +64,8 @@ export const useAppStore = create<AppState>()(
             isPlaying: true, // 默认启动
             showSettings: false,
             showAddModal: false,
+            fishMode: false,
+            theme: 'light', // 默认浅色主题
 
             setCurrentIndex: (index) => {
                 const { corpusList } = get()
@@ -116,6 +125,18 @@ export const useAppStore = create<AppState>()(
                 set({ showAddModal: show })
             },
 
+            setFishMode: (fishMode) => {
+                set({ fishMode })
+            },
+
+            setTheme: (theme) => {
+                set({ theme })
+            },
+
+            toggleTheme: () => {
+                set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' }))
+            },
+
             nextCorpus: () => {
                 const { corpusList, currentIndex } = get()
                 if (corpusList.length === 0) return
@@ -136,7 +157,8 @@ export const useAppStore = create<AppState>()(
                 corpusList: state.corpusList,
                 currentIndex: state.currentIndex,
                 settings: state.settings,
-                // 不保存播放状态，总是默认启动
+                theme: state.theme,
+                // 不保存播放状态和摸鱼模式，总是默认启动
             }),
         }
     )

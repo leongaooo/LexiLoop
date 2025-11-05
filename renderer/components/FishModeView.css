@@ -1,0 +1,133 @@
+.fish-mode-view {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+.fish-drag-handle {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.1);
+    color: #666;
+    font-size: 18px;
+    cursor: move;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: background 0.2s, color 0.2s;
+    -webkit-app-region: drag;
+    user-select: none;
+    line-height: 1;
+    font-weight: normal;
+}
+
+.fish-drag-handle:hover {
+    background: rgba(0, 0, 0, 0.2);
+    color: #000;
+}
+
+.app.dark .fish-drag-handle {
+    background: rgba(255, 255, 255, 0.1);
+    color: #999;
+}
+
+.app.dark .fish-drag-handle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.fish-restore-btn {
+    position: absolute;
+    left: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: background 0.2s;
+    -webkit-app-region: no-drag;
+}
+
+.app.dark .fish-restore-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+}
+
+.app.dark .fish-restore-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.fish-restore-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.fish-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0 0 72px;
+    height: 100%;
+    margin: 0;
+    line-height: 1;
+}
+
+.fish-corpus-text {
+    text-align: center;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    user-select: text;
+    animation: fadeInUp 0.5s ease-out;
+    will-change: opacity, transform;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fish-empty-message {
+    flex: 1;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    padding-left: 72px;
+    margin: 0;
+    line-height: 1;
+}

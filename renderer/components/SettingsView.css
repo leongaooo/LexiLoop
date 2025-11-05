@@ -14,6 +14,12 @@
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.settings-view.dark .settings-container {
+    background: #2d2d2d;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .settings-header {
@@ -22,6 +28,11 @@
     align-items: center;
     padding: 20px 24px;
     border-bottom: 1px solid #e0e0e0;
+    transition: border-color 0.3s;
+}
+
+.settings-view.dark .settings-header {
+    border-bottom-color: #404040;
 }
 
 .settings-header h2 {
@@ -47,6 +58,11 @@
 .settings-section {
     padding: 24px;
     border-bottom: 1px solid #e0e0e0;
+    transition: border-color 0.3s;
+}
+
+.settings-view.dark .settings-section {
+    border-bottom-color: #404040;
 }
 
 .settings-section:last-child {
@@ -55,8 +71,49 @@
 
 .settings-section h3 {
     font-size: 18px;
-    margin-bottom: 20px;
+    margin: 0;
     color: #333;
+}
+
+.settings-view.dark .settings-section h3 {
+    color: #ffffff;
+}
+
+.settings-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.export-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.export-btn:hover {
+    background: #f0f0f0;
+    border-color: #bbb;
+}
+
+.settings-view.dark .export-btn {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+.settings-view.dark .export-btn:hover {
+    background: #1a1a1a;
+    border-color: #555;
 }
 
 .setting-item {
@@ -73,11 +130,23 @@
 }
 
 .setting-item input[type="number"],
-.setting-item input[type="color"] {
+.setting-item input[type="color"],
+.setting-item select {
     padding: 6px 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+    background: white;
+    color: #333;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.settings-view.dark .setting-item input[type="number"],
+.settings-view.dark .setting-item input[type="color"],
+.settings-view.dark .setting-item select {
+    background: #1a1a1a;
+    border-color: #404040;
+    color: #ffffff;
 }
 
 .setting-item input[type="number"] {
@@ -104,6 +173,12 @@
     background: #f9f9f9;
     border-radius: 4px;
     border: 1px solid #e0e0e0;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.settings-view.dark .corpus-item {
+    background: #1a1a1a;
+    border-color: #404040;
 }
 
 .corpus-item:hover {
@@ -131,6 +206,13 @@
     background: white;
     cursor: pointer;
     transition: all 0.2s;
+    color: #333;
+}
+
+.settings-view.dark .corpus-actions button {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
 }
 
 .corpus-actions button:hover {
