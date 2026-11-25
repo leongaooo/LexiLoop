@@ -1,0 +1,54 @@
+name: Bug 报告
+description: 报告 LexiLoop 桌面端的可复现问题
+title: "[bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。桌面端问题多数与操作系统、安装包类型有关，请尽量补全下面的信息。
+  - type: input
+    id: version
+    attributes:
+      label: LexiLoop 版本
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: 操作系统
+      options:
+        - Windows 10 / 11
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Linux
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 打开应用
+        2. 导入语料
+        3. 看到 ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志或截图
+      description: 主进程报错可在开发者工具 Console 中看到
+      render: shell
